@@ -30,3 +30,63 @@ img {
   margin: 0;
   list-style: none;
 }
+
+.content {
+  display: inline-flexbox;
+  margin-left: 70px;
+}
+
+.title {
+  display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.finder {
+  color:black;
+  width: 450px;
+
+  border: 1px solid black;
+  border-radius: 4px;
+
+  padding: 10px 8px;
+  margin: 50px 50px;
+}
+
+.country__name {
+  font-weight: 700;
+    font-size: 20px;
+    line-height: 1.63;
+    color: #212121;
+    text-align: center;
+}
+
+.countries__name {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.63;
+  color: #212121;
+}
+
+.country__title {
+  font-weight: 600;
+    font-size: 20px;
+    line-height: 1.63;
+    color: #212121;
+}
+
+.country__title-item {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.63;
+  color: #212121;
+}
+
+.languages-list__item {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.63;
+  color: #212121;
+
+  margin-left: 70px;
+}

@@ -1,22 +1,28 @@
 <h2 class="country__name">{{name}}</h2>
-<div>
+<div class="title">
     <div>
         <ul class="list country-list">
             <li class="country-item">
-                <h3 class="country__capital">Capital:</h3>
-                <p class="country__capital-name">{{capital}}</p>
+                <p class="country__title">Capital:
+                    <span class="country__title-item">{{capital}}</span>
+                </p>
+                
             </li>
             <li class="country-item">
-                <h3 class="country__population">Population:</h3>
-                <p class="country__population-number">{{population}}</p>
+                <p class="country__title">Population:
+                    <span class="country__title-item">{{population}}</span>
+                </p>
+                
             </li>
             <li class="country-item">
-                <h3 class="country__languages">Languages:</h3>
-                <ul class="languages-list">
+                <p class="country__title">Languages:
+                    <ul class="languages-list">
                     {{#each languages}}
                         <li class="languages-list__item">{{this.name}}</li>
                     {{/each}}
                 </ul>
+                </p>
+                
             </li>
         </ul>
     </div>
