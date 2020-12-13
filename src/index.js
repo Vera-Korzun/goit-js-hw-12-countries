@@ -16,35 +16,35 @@ const createMarkup = (data, createUl) => {
   createUl.innerHTML += countries(data);
 };
 
-const getData = (e) => {fetchCountries(e.target.value)
-        .then((response) => {return response.json()})
-        .then((data)=> {
-            if (data.status == 404) {
-              const myError = error({
-                text: "Сountry not found. Please, try to enter again.",
-                maxTextHeight: null,
-                delay: 3000,
-                type: 'error'
-                });
-                console.log(myError);
-            } else 
-            if (data.length > 10) {
-              const myError = error({
-                text: "Too many matches found. Please enter a more specific query!",
-                maxTextHeight: null,
-                delay: 3000,
-                type: 'error'
-                });
-                console.log(myError);
-            } else if (data.length > 2) {
-              const createUl=document.createElement('ul');
-              data.forEach(item => createMarkup(item, createUl))
-              refs.content.appendChild(createUl);
-              //console.log(content);
-            } else {
-              refs.content.innerHTML = country(data[0]);
-              //console.log(data[0]);
-            };
-          })};
+const getData = (e) => {
+  fetchCountries(e.target.value)
+    .then((data)=> {
+      if (data.status == 404) {
+        const myError = error({
+          text: "Сountry not found. Please, try to enter again.",
+          maxTextHeight: null,
+          delay: 3000,
+          type: 'error'
+        });
+        console.log(myError);
+      } else 
+      if (data.length > 10) {
+        const myError = error({
+          text: "Too many matches found. Please enter a more specific query!",
+          maxTextHeight: null,
+          delay: 3000,
+          type: 'error'
+        });
+        console.log(myError);
+      } else
+      if (data.length > 1) {
+        const createUl=document.createElement('ul');
+          data.forEach(item => createMarkup(item, createUl))
+          refs.content.appendChild(createUl); 
+      } else {
+        refs.content.innerHTML = country(data[0]);
+        };
+    })
+};
 
 refs.getfinder.addEventListener('input',debounce(getData, 500));
