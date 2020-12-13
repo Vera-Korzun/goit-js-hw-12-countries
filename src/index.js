@@ -1,61 +1,50 @@
+import country from './templates/country.hbs';
+import countries from './templates/countries-list.hbs';
+import fetchCountries from './js/fetchCountries.js'
+import {refs} from './js/refs.js';
+import debounce from 'lodash.debounce';
+
+const {error} = require('@pnotify/core');
+import '../node_modules/@pnotify/core/dist/PNotify.css'
+import '../node_modules/@pnotify/core/dist/Angeler.css'
+import '../node_modules/@pnotify/core/dist/BrightTheme.css'
+import '../node_modules/@pnotify/core/dist/Material.css'
+
 import './styles.css';
 
-//с дефолтным экспортом функции fetchCountries(searchQuery), 
-//возвращающей промис с массивом стран, результат запроса к API.
+const createMarkup = (data, createUl) => {
+  createUl.innerHTML += countries(data);
+};
 
-//https://restcountries.eu/rest/v2/name/{name}
-
-// Создай небольшое приложение поиска данных о стране по ее частичному или полному имени. 
-//Используй Rest Countries API, а именно ендпоинт /name, возвращающий массив объектов стран попавших под критерий поиска.
-
-// Достаточно чтобы приложение работало для большинства стран. Некоторые страны, такие как Sudan, 
-//могут создавать проблемы, поскольку название страны является частью названия другой страны, South Sudan. 
-//Не нужно беспокоиться об этих исключениях.
-
-// Интерфейс очень простой. Название страны для поиска пользователь вводит в текстовое поле.
-
-// ⚠️ ВНИМАНИЕ! HTTP-запросы на бекенд происходят не по сабмиту формы, формы нет, 
-//а при наборе имени страны в инпуте, то есть по событию input. Но делать HTTP-запрос при каждом 
-//нажатии клавиши нельзя, так как одновременно получится много HTTP-запросов которые будут 
-//выполняться в непредсказуемом порядке (race conditions). Поэтому на обработчик события необходимо 
-//применить подход debounce и делать HTTP-запрос спустя 500мс после того, как пользователь перестал вводить текст. 
-//Используй npm-пакет lodash.debounce.
-
-// Если бекенд вернул больше чем 10 стран подошедших под критерий введенный пользователем, 
-//в интерфейсе отображается нотификация о том, что необходимо сделать запрос более специфичным.
-// Для оповещений используй плагин pnotify.
-
-const _ = require('lodash');
-const getfinder = document.querySelector('.finder');
-const content = document.querySelector('.content')
-
-//название, столица, население, языки и флаг
-//<span>${country.languages-name}</span>
-const createMarkup = (country) => {
-    return `<li>
-                <h2>${country.name}</h2>
-                <h3>${country.capital}</h3>
-                <span>${country.population}</span>
-                <svg>
-                    <use href=${country.flag}></use>
-                 </svg>
-            </li>
-             `;
-}
-
-const getData = _.debounce((e) => {
-    e.target.value;
-    fetch(`https://restcountries.eu/rest/v2/name/${e.target.value}`)
+const getData = (e) => {fetchCountries(e.target.value)
         .then((response) => {return response.json()})
         .then((data)=> {
-            console.log(data);
-            content.innerHTML = `<ul>${data.reduce((acc, item) => {
-              acc += createMarkup(item);
-              return acc;
-            }, "")}</ul>`;
-          })
-    //console.log('hello');
-  }, 500);
+            if (data.status == 404) {
+              const myError = error({
+                text: "Сountry not found. Please, try to enter again.",
+                maxTextHeight: null,
+                delay: 3000,
+                type: 'error'
+                });
+                console.log(myError);
+            } else 
+            if (data.length > 10) {
+              const myError = error({
+                text: "Too many matches found. Please enter a more specific query!",
+                maxTextHeight: null,
+                delay: 3000,
+                type: 'error'
+                });
+                console.log(myError);
+            } else if (data.length > 2) {
+              const createUl=document.createElement('ul');
+              data.forEach(item => createMarkup(item, createUl))
+              refs.content.appendChild(createUl);
+              //console.log(content);
+            } else {
+              refs.content.innerHTML = country(data[0]);
+              //console.log(data[0]);
+            };
+          })};
 
-
-getfinder.addEventListener('input', getData);
+refs.getfinder.addEventListener('input',debounce(getData, 500));
