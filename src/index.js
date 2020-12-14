@@ -19,7 +19,7 @@ const createMarkup = (data, createUl) => {
 
 const getData = (e) => {
   fetchCountries(e.target.value)
-    .then(response => response.json())
+    .then((response) => {return response.json()})
     .then((data)=> {
       if (data.status == 404) {
         const myError = error({
