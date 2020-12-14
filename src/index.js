@@ -16,11 +16,11 @@ const createMarkup = (data, createUl) => {
   createUl.innerHTML += countries(data);
 };
 
-
 const getData = (e) => {
   fetchCountries(e.target.value)
     .then((response) => {return response.json()})
     .then((data)=> {
+      refs.content.innerHTML = '';
       if (data.status == 404) {
         const myError = error({
           text: "Сountry not found. Please, try to enter again.",
